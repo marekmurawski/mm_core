@@ -12,7 +12,7 @@ mmCore Plugin can be installed into your WolfCMS by uploading it to ***CMS_ROOT/
 Changelog
 ---------
 
-0.1.0
+###### 0.1.0
 
 - initial version
 
