@@ -1,0 +1,157 @@
+/**
+* @outputStyle compact
+* @debugInfo false
+* @lineComments false
+*/
+
+
+$fontSize: 12px;
+$primary: #ff770d;
+$white: hsl(45,0,95);
+$black: hsl(45,0,5);
+
+
+$error: hsl(0,60,80%);
+$errorFrame: darken($error,20%);
+$errorText: saturate(darken($error,50%),100%);
+
+$success: hsl(80,60,65%);
+$successFrame: darken($success,20%);
+$successText: saturate(darken($success,50%),50%);
+
+$progress: hsl(0,0,90%);
+$progressFrame: darken($progress,10%);
+$progressText: darken($progress,50%);
+
+$statsColor: hsl(50,50,50%);
+
+$formBorder: darken($white,20%);
+
+/* SIDEBAR INFOBOX */
+#mm_sbox {
+    &.fixed { position: fixed; top: 0; }
+    position: absolute;
+    margin-top: 12px;
+    padding-top: 12px;
+    right: 1%;
+    width: 25%;
+    margin-bottom: 5px; min-height: 50px;
+}
+
+#mmsg_wrap {
+    padding: 10px;
+    min-height: 50px;
+    margin: 4px 0px 0px 0px;
+    transition: background-color .5s;
+
+    &.success {
+        color: $successText;
+        background: $success;
+        border: 1px solid $successFrame;
+    }
+    &.error {
+        color: $errorText;
+        background: $error;
+        border: 1px solid $errorFrame;
+    }
+    &.progress {
+        color: $progressText;
+        background: $progress url('../icons/progress-big.gif') no-repeat center center;
+        border: 1px solid $progressFrame;
+        &.init {background: $progress;}
+    }
+}
+
+#mmsg_stats {
+    margin-bottom: 8px;
+    padding: 1px 4px;
+    color: $statsColor;
+    background: lighten($statsColor,30%);
+    font-size:$fontSize - 2;
+    text-align: right;
+}
+.mm_copyr {clear: both; text-align: right;}
+
+
+/* MM_PLUGIN */
+#mm_plugin {
+    .full {width: 100%}
+    .half {width: 50%}
+    .quarter {width: 25%}
+    .three-quarters{width: 75%}
+    .text-center{text-align: center;}
+    .text-right{text-align: right;}
+    .text-left{text-align: left;}
+    .comment {color: lighten($black,50%);}
+    input, textarea, select {
+        border: 1px solid $formBorder;
+        font-size: $fontSize;
+        box-sizing: border-box;
+        outline: none;
+        margin: 1px 1px;
+        padding: 1px;
+        min-width: 60px;
+        background-color: $white;
+
+        &[type=checkbox] {min-width: 16px; margin: 5px 2px;}
+        &.large{ font-size: $fontSize + 2px; font-weight: bold;}
+        &.lang { background-color: #EEE; }
+        &.readonly {color: #CCC;}
+        &:hover, &:focus {
+            background-color: lighten(desaturate($primary,10%),40%);
+            border-color: darken($formBorder,15%);
+            &.readonly {
+                background-color: #EEE;
+            }
+        }
+    }
+    fieldset {border:1px solid darken($white,15%); background-color: darken($white,3%); padding: $fontSize; margin: $fontSize 0px; }
+    legend {padding: 0 $fontSize; font-weight: bold; }
+    textarea { resize: none; height: 48px; overflow: hidden; font-family: sans-serif;}
+    select { border: 1px solid white;}
+
+    label {
+        text-align: right;
+        width: 100%;
+        display: block;
+        &.inline {
+            width: auto;
+            display: inline;
+        }
+    }
+    input[type=button], input[type=submit], input[type=reset] {
+        position: relative;
+        padding: 3px 5px;
+        font-weight: bold;
+        font-size: $fontSize;
+        box-shadow: inset 1px 1px 1px rgba($white,.5),
+        inset -1px -1px 1px rgba(darken($primary,30%),.4) !important;
+        border-color: $primary;
+        border-radius: 2px !important;
+        background: lighten($primary,15%);
+        &:hover, &:focus {background: $primary;}
+    }
+    table {
+        td {
+            font-size: $fontSize;
+            &.label {
+                padding: 3px 6px 0px 6px;
+                width: 60px;
+                text-align: right;
+                &.wide {width: 120px;}
+            }
+        }
+        &.header {
+            td {padding: 2px 6px;}
+            background-color: darken($white,10%);
+            margin-bottom: 16px;
+            select { border: 1px solid darken($white,15%);}
+        }
+        &.settings {
+            td{
+                padding: $fontSize/2;
+            }
+        }
+    }
+}
+
