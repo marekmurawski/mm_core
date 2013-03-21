@@ -1,8 +1,9 @@
 <?php
 
 /* Security measure */
-if ( !defined( 'IN_CMS' ) )
+if ( !defined('IN_CMS') )
     exit();
+
 
 class mmInstaller {
 
@@ -11,8 +12,8 @@ class mmInstaller {
     private $successMessages = array( );
     private $plugin_name     = '';
 
-    public function __construct( $name ) {
-        $this->plugin_name = trim( $name, '/\\' );
+    public function __construct($name) {
+        $this->plugin_name = trim($name, '/\\');
 
     }
 
@@ -23,54 +24,54 @@ class mmInstaller {
     }
 
 
-    public function logError( $msg ) {
-        $this->errorMessages[] = __( $msg, array( ':plugin_id' => $this->plugin_name ) );
+    public function logError($msg) {
+        $this->errorMessages[] = __($msg, array( ':plugin_id' => $this->plugin_name ));
         echo 'ERROR: ' . $msg . '<br/>';
 
     }
 
 
-    public function logInfo( $msg ) {
-        $this->infoMessages[] = __( $msg, array( ':plugin_id' => $this->plugin_name ) );
+    public function logInfo($msg) {
+        $this->infoMessages[] = __($msg, array( ':plugin_id' => $this->plugin_name ));
         echo 'INFO: ' . $msg . '<br/>';
 
     }
 
 
-    public function logSuccess( $msg ) {
-        $this->successMessages[] = __( $msg, array( ':plugin_id' => $this->plugin_name ) );
+    public function logSuccess($msg) {
+        $this->successMessages[] = __($msg, array( ':plugin_id' => $this->plugin_name ));
         echo $msg . '<br/>';
 
     }
 
 
     public function send() {
-        if ( !empty( $this->infoMessages ) ) {
-            Flash::set( 'info', implode( '<br/>', $this->infoMessages ) );
+        if ( !empty($this->infoMessages) ) {
+            Flash::set('info', implode('<br/>', $this->infoMessages));
         }
-        if ( !empty( $this->errorMessages ) ) {
-            Flash::set( 'error', implode( '<br/>', $this->errorMessages ) );
+        if ( !empty($this->errorMessages) ) {
+            Flash::set('error', implode('<br/>', $this->errorMessages));
         }
 
-        if ( empty( $this->errorMessages ) )
-            $this->successMessages[] = __( 'Successfully activated plugin' ) . ' <b>' . $this->plugin_name . '</b>';
+        if ( empty($this->errorMessages) )
+            $this->successMessages[] = __('Successfully activated plugin <b>:name</b>', array( ':name' => $this->plugin_name ));
 
-        if ( !empty( $this->successMessages ) ) {
-            Flash::set( 'success', implode( '<br/>', $this->successMessages ) );
+        if ( !empty($this->successMessages) ) {
+            Flash::set('success', implode('<br/>', $this->successMessages));
         }
 
     }
 
 
-    public function importSnippets( $path ) {
-        $path       = trim( $path, '/\\' );
+    public function importSnippets($path) {
+        $path       = trim($path, '/\\');
         $samplesDir = PLUGINS_ROOT . DS . $this->plugin_name . DS . $path;
 
-        $scandir = scandir( $samplesDir );
+        $scandir = scandir($samplesDir);
 
         foreach ( $scandir as $k => $v ) {
-            if ( $v == '.' || $v == '..' || !endsWith( $v, '.php' ) ) {
-                unset( $scandir[$k] );
+            if ( $v == '.' || $v == '..' || !endsWith($v, '.php') ) {
+                unset($scandir[$k]);
             }
         }
 
@@ -78,11 +79,11 @@ class mmInstaller {
         $snippetNamesStr = '';
         $cnt             = 0;
         foreach ( $scandir as $file ) {
-            if ( $snippetContent = file_get_contents( $samplesDir . DS . $file ) ) {
+            if ( $snippetContent = file_get_contents($samplesDir . DS . $file) ) {
 
                 $newSnippet                = new Snippet;
-                $newSnippet->name          = str_replace( '.php', '', $file );
-                $newSnippet->created_on    = date( 'Y-m-d H:i:s' );
+                $newSnippet->name          = str_replace('.php', '', $file);
+                $newSnippet->created_on    = date('Y-m-d H:i:s');
                 $newSnippet->content       = $snippetContent;
                 $newSnippet->content_html  = $snippetContent;
                 $newSnippet->created_by_id = 1;
@@ -91,10 +92,10 @@ class mmInstaller {
                     $cnt++;
                 };
                 if ( $cnt ) {
-                    $this->logInfo( __( 'Imported <b>:count</b> snippets! <br><b>:names</b>', array(
+                    $this->logInfo(__('Imported <b>:count</b> snippets! <br/><b>:names</b>', array(
                                 ':count' => $cnt,
                                 ':names' => $snippetNamesStr,
-                    ) ) );
+                    )));
                 }
             }
         }
@@ -107,21 +108,21 @@ class mmInstaller {
      *
      * @param string $permissionName
      */
-    public static function deletePermission( $permissionName ) {
-        if ( $perm = Permission::findByName( $permissionName ) ) {
+    public static function deletePermission($permissionName) {
+        if ( $perm = Permission::findByName($permissionName) ) {
 
             // unrelate roles assigned to permission
-            RolePermission::deleteWhere( 'RolePermission', 'permission_id=?', array( $perm->id ) );
+            RolePermission::deleteWhere('RolePermission', 'permission_id=?', array( $perm->id ));
 
             if ( !$perm->delete() ) {
-                self::logError( __( 'Permission could not be deleted' ) . ' - ' . $permissionName );
+                self::logError(__('Permission <b>:perm</b> could not be deleted', array( ':perm' => $permissionName )));
                 return false;
             } else {
-                self::logInfo( __( 'Permission deleted' ) . ' - ' . $permissionName );
+                self::logInfo(__('Permission <b>:perm</b> deleted', array( ':perm' => $permissionName )));
                 return true;
             }
         } else {
-            self::logInfo( __( 'Permission' ) . ' ' . $permissionName . ' ' . __( 'was not found and not deleted!' ) );
+            self::logInfo(__('Permission <b>:perm</b> was not found and not deleted!', array( ':perm' => $permissionName )));
             return true;
         }
 
@@ -133,18 +134,18 @@ class mmInstaller {
      *
      * @param string $permissionName
      */
-    public static function createPermission( $permissionName ) {
-        if ( !Permission::findByName( $permissionName ) ) {
-            $perm = new Permission( array( 'name' => $permissionName ) );
+    public static function createPermission($permissionName) {
+        if ( !Permission::findByName($permissionName) ) {
+            $perm = new Permission(array( 'name' => $permissionName ));
             if ( !$perm->save() ) {
-                self::logError( __( 'Permission could not be created' ) . ' - ' . $permissionName );
+                self::logError(__('Permission <b>:perm</b> could not be created', array( ':perm' => $permissionName )));
                 return false;
             } else {
-                self::logInfo( __( 'Permission created' ) . ' - ' . $permissionName );
+                self::logInfo(__('Permission <b>:perm</b> created', array( ':perm' => $permissionName )));
                 return true;
             }
         } else {
-            self::logInfo( __( 'Permission already exists - ' . $permissionName ) );
+            self::logInfo(__('Permission <b>:perm</b> already exists', array( ':perm' => $permissionName )));
             return true;
         }
 
@@ -156,23 +157,23 @@ class mmInstaller {
      *
      * @param string $roleName
      */
-    public static function deleteRole( $roleName ) {
-        if ( $role = Role::findByName( $roleName ) ) {
+    public static function deleteRole($roleName) {
+        if ( $role = Role::findByName($roleName) ) {
 
-            if ( Record::existsIn( 'RolePermission', 'role_id=?', array( $role->id ) ) ) {
-                self::logError( __( 'Role has some permissions' ) . ' - ' . $roleName . ' - ' . __( 'cannot delete role with existing permissions' ) );
+            if ( Record::existsIn('RolePermission', 'role_id=?', array( $role->id )) ) {
+                self::logError(__('Role <b>:role</b> has some permissions - cannot delete role with existing permissions'));
                 return false;
             };
 
             if ( !$role->delete() ) {
-                self::logError( __( 'Role could not be deleted' ) . ' - ' . $roleName );
+                self::logError(__('Role <b>:role</b> could not be deleted', array( ':role' => $roleName )));
                 return false;
             } else {
-                self::logInfo( __( 'Role deleted' ) . ' - ' . $roleName );
+                self::logInfo(__('Role <b>:role</b> deleted!', array( ':role' => $roleName )));
                 return true;
             }
         } else {
-            self::logInfo( __( 'Role' ) . ' ' . $roleName . ' ' . __( 'was not found and not deleted!' ) );
+            self::logInfo(__('Role <b>:role</b> was not found and not deleted!', array( ':role' => $roleName )));
             return true;
         }
 
@@ -184,18 +185,18 @@ class mmInstaller {
      *
      * @param string $roleName
      */
-    public static function createRole( $roleName ) {
-        if ( !Role::findByName( $roleName ) ) {
-            $role = new Role( array( 'name' => $roleName ) );
+    public static function createRole($roleName) {
+        if ( !Role::findByName($roleName) ) {
+            $role = new Role(array( 'name' => $roleName ));
             if ( !$role->save() ) {
-                self::logError( __( 'Could not create role - ' ) . $roleName );
+                self::logError(__('Could not create role <b>:role</b>', array( ':role' => $roleName )));
                 return false;
             } else {
-                self::logInfo( __( 'Created role - ' ) . $roleName );
+                self::logInfo(__('Created role <b>:role</b>', array( ':role' => $roleName )));
                 return true;
             }
         } else {
-            self::logInfo( __( 'Role already exists - ' ) . $roleName );
+            self::logInfo(__('Role <b>:role</b> already exists!', array( ':role' => $roleName )));
             return true;
         }
 
@@ -211,25 +212,25 @@ class mmInstaller {
      * @param type $roleName
      * @return boolean
      */
-    public static function assignPermissionToRole( $permissionName, $roleName ) {
+    public static function assignPermissionToRole($permissionName, $roleName) {
 
-        $perm = Permission::findByName( $permissionName );
-        $role = Role::findByName( $roleName );
+        $perm = Permission::findByName($permissionName);
+        $role = Role::findByName($roleName);
         if ( ($role && $perm ) ) {
-            if ( Record::existsIn( 'RolePermission', 'permission_id=? AND role_id=?', array( $perm->id, $role->id ) ) ) {
-                self::logInfo( __( 'Role' ) . ' ' . $roleName . ' ' . __( 'already has permission' ) . ' ' . $permissionName . '!' );
+            if ( Record::existsIn('RolePermission', 'permission_id=? AND role_id=?', array( $perm->id, $role->id )) ) {
+                self::logInfo(__('Role <b>:role</b> already has permission <b>:perm</b>!', array( ':perm' => $permissionName, ':role' => $roleName )));
                 return true;
             }
-            $rp = new RolePermission( array( 'permission_id' => $perm->id, 'role_id'       => $role->id ) );
+            $rp = new RolePermission(array( 'permission_id' => $perm->id, 'role_id'       => $role->id ));
             if ( !$rp->save() ) {
-                self::logError( __( 'Could not assign permission' ) . ' ' . $permissionName . ' ' . __( 'to role' ) . ' ' . $roleName . '!' );
+                self::logError(__('Could not assign permission <b>:perm</b> to role <b>:role</b>!', array( ':perm' => $permissionName, ':role' => $roleName )));
                 return false;
             }
             else
-                self::logInfo( __( 'Assigned permission' ) . ' ' . $permissionName . ' ' . __( 'to role' ) . ' ' . $roleName . '!' );
+                self::logInfo(__('Assigned permission <b>:perm</b> to role <b>:role</b>!', array( ':perm' => $permissionName, ':role' => $roleName )));
             return true;
         } else {
-            self::logError( __( 'Either permission or role does not exist - ' ) . ' ' . $permissionName . ', ' . $roleName . '!' );
+            self::logError(__('Either permission <b>:perm</b> or role <b>:role</b> does not exist!', array( ':perm' => $permissionName, ':role' => $roleName )));
             return false;
         }
 
