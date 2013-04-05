@@ -134,18 +134,18 @@ class mmInstaller {
      *
      * @param string $permissionName
      */
-    public static function createPermission($permissionName) {
+    public function createPermission($permissionName) {
         if ( !Permission::findByName($permissionName) ) {
             $perm = new Permission(array( 'name' => $permissionName ));
             if ( !$perm->save() ) {
-                self::logError(__('Permission <b>:perm</b> could not be created', array( ':perm' => $permissionName )));
+                $this->logError(__('Permission <b>:perm</b> could not be created', array( ':perm' => $permissionName )));
                 return false;
             } else {
-                self::logInfo(__('Permission <b>:perm</b> created', array( ':perm' => $permissionName )));
+                $this->logInfo(__('Permission <b>:perm</b> created', array( ':perm' => $permissionName )));
                 return true;
             }
         } else {
-            self::logInfo(__('Permission <b>:perm</b> already exists', array( ':perm' => $permissionName )));
+            $this->logInfo(__('Permission <b>:perm</b> already exists', array( ':perm' => $permissionName )));
             return true;
         }
 
@@ -157,23 +157,23 @@ class mmInstaller {
      *
      * @param string $roleName
      */
-    public static function deleteRole($roleName) {
+    public function deleteRole($roleName) {
         if ( $role = Role::findByName($roleName) ) {
 
             if ( Record::existsIn('RolePermission', 'role_id=?', array( $role->id )) ) {
-                self::logError(__('Role <b>:role</b> has some permissions - cannot delete role with existing permissions'));
+                $this->logError(__('Role <b>:role</b> has some permissions - cannot delete role with existing permissions'));
                 return false;
             };
 
             if ( !$role->delete() ) {
-                self::logError(__('Role <b>:role</b> could not be deleted', array( ':role' => $roleName )));
+                $this->logError(__('Role <b>:role</b> could not be deleted', array( ':role' => $roleName )));
                 return false;
             } else {
-                self::logInfo(__('Role <b>:role</b> deleted!', array( ':role' => $roleName )));
+                $this->logInfo(__('Role <b>:role</b> deleted!', array( ':role' => $roleName )));
                 return true;
             }
         } else {
-            self::logInfo(__('Role <b>:role</b> was not found and not deleted!', array( ':role' => $roleName )));
+            $this->logInfo(__('Role <b>:role</b> was not found and not deleted!', array( ':role' => $roleName )));
             return true;
         }
 
@@ -185,18 +185,18 @@ class mmInstaller {
      *
      * @param string $roleName
      */
-    public static function createRole($roleName) {
+    public function createRole($roleName) {
         if ( !Role::findByName($roleName) ) {
             $role = new Role(array( 'name' => $roleName ));
             if ( !$role->save() ) {
-                self::logError(__('Could not create role <b>:role</b>', array( ':role' => $roleName )));
+                $this->logError(__('Could not create role <b>:role</b>', array( ':role' => $roleName ))); 
                 return false;
             } else {
-                self::logInfo(__('Created role <b>:role</b>', array( ':role' => $roleName )));
+                $this->logInfo(__('Created role <b>:role</b>', array( ':role' => $roleName )));
                 return true;
             }
         } else {
-            self::logInfo(__('Role <b>:role</b> already exists!', array( ':role' => $roleName )));
+            $this->logInfo(__('Role <b>:role</b> already exists!', array( ':role' => $roleName )));
             return true;
         }
 
@@ -212,25 +212,25 @@ class mmInstaller {
      * @param type $roleName
      * @return boolean
      */
-    public static function assignPermissionToRole($permissionName, $roleName) {
+    public function assignPermissionToRole($permissionName, $roleName) {
 
         $perm = Permission::findByName($permissionName);
         $role = Role::findByName($roleName);
         if ( ($role && $perm ) ) {
             if ( Record::existsIn('RolePermission', 'permission_id=? AND role_id=?', array( $perm->id, $role->id )) ) {
-                self::logInfo(__('Role <b>:role</b> already has permission <b>:perm</b>!', array( ':perm' => $permissionName, ':role' => $roleName )));
+                $this->logInfo(__('Role <b>:role</b> already has permission <b>:perm</b>!', array( ':perm' => $permissionName, ':role' => $roleName )));
                 return true;
             }
             $rp = new RolePermission(array( 'permission_id' => $perm->id, 'role_id'       => $role->id ));
             if ( !$rp->save() ) {
-                self::logError(__('Could not assign permission <b>:perm</b> to role <b>:role</b>!', array( ':perm' => $permissionName, ':role' => $roleName )));
+                $this->logError(__('Could not assign permission <b>:perm</b> to role <b>:role</b>!', array( ':perm' => $permissionName, ':role' => $roleName )));
                 return false;
             }
             else
-                self::logInfo(__('Assigned permission <b>:perm</b> to role <b>:role</b>!', array( ':perm' => $permissionName, ':role' => $roleName )));
+                $this->logInfo(__('Assigned permission <b>:perm</b> to role <b>:role</b>!', array( ':perm' => $permissionName, ':role' => $roleName )));
             return true;
         } else {
-            self::logError(__('Either permission <b>:perm</b> or role <b>:role</b> does not exist!', array( ':perm' => $permissionName, ':role' => $roleName )));
+            $this->logError(__('Either permission <b>:perm</b> or role <b>:role</b> does not exist!', array( ':perm' => $permissionName, ':role' => $roleName )));
             return false;
         }
 
