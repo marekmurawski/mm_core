@@ -25,21 +25,21 @@ class mmInstaller {
 
 
     public function logError($msg) {
-        $this->errorMessages[] = __($msg, array( ':plugin_id' => $this->plugin_name ));
+        $this->errorMessages[] = '<b>[' . $this->plugin_name . ']</b> ' . $msg;
         echo 'ERROR: ' . $msg . '<br/>';
 
     }
 
 
     public function logInfo($msg) {
-        $this->infoMessages[] = __($msg, array( ':plugin_id' => $this->plugin_name ));
+        $this->infoMessages[] = '<b>[' . $this->plugin_name . ']</b> ' . $msg;
         echo 'INFO: ' . $msg . '<br/>';
 
     }
 
 
     public function logSuccess($msg) {
-        $this->successMessages[] = __($msg, array( ':plugin_id' => $this->plugin_name ));
+        $this->successMessages[] = '<b>[' . $this->plugin_name . ']</b> ' . $msg;
         echo $msg . '<br/>';
 
     }
@@ -54,7 +54,7 @@ class mmInstaller {
         }
 
         if ( empty($this->errorMessages) )
-            $this->successMessages[] = __('Successfully activated plugin <b>:name</b>', array( ':name' => $this->plugin_name ));
+            $this->successMessages[] = __('Successfully activated plugin!');
 
         if ( !empty($this->successMessages) ) {
             Flash::set('success', implode('<br/>', $this->successMessages));
@@ -189,7 +189,7 @@ class mmInstaller {
         if ( !Role::findByName($roleName) ) {
             $role = new Role(array( 'name' => $roleName ));
             if ( !$role->save() ) {
-                $this->logError(__('Could not create role <b>:role</b>', array( ':role' => $roleName ))); 
+                $this->logError(__('Could not create role <b>:role</b>', array( ':role' => $roleName )));
                 return false;
             } else {
                 $this->logInfo(__('Created role <b>:role</b>', array( ':role' => $roleName )));

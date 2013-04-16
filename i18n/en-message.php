@@ -1,7 +1,7 @@
 <?php
 
     /**
-     * EN file for plugin mm_core
+     * YourLanguage file for plugin mm_core
      *
      * @package Plugins
      * @subpackage mm_core
