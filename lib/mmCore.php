@@ -63,4 +63,43 @@ class mmCore {
     }
 
 
+    /**
+     * HELPER FUNCTIONS
+     */
+
+    /**
+     * Parse values in multiline string like
+     *
+     * name1 => value1
+     * name2 => value2
+     *
+     * into Array
+     *
+     * @param String $values
+     * @param String $delimeter
+     * @param String $comment
+     * @return Array
+     */
+    public static function parseValues($values, $delimeter = '=>', $comment = '#') {
+        $result = array( );
+        foreach ( explode(PHP_EOL, $values) as $value ) {
+            $value = trim($value);
+            if ( !startsWith($value, $comment) && (!empty($value)) ) {
+                $pos_delimeter = strpos($value, $delimeter);
+                if ( $pos_delimeter > 1 ) {
+                    $key          = trim(substr($value, 0, $pos_delimeter));
+                    $val          = trim(substr($value, $pos_delimeter + strlen($delimeter)));
+                    $val          = strlen($val) > 0 ? $val : $key;
+                    $result[$key] = $val;
+                } else {
+                    $key          = trim($value);
+                    $result[$key] = $key;
+                }
+            }
+        };
+        return $result;
+
+    }
+
+
 }
