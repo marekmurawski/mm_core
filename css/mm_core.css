@@ -21,11 +21,13 @@
 #mm_plugin .full { width: 100%; }
 #mm_plugin .half { width: 50%; }
 #mm_plugin .quarter { width: 25%; }
+#mm_plugin .one-third { width: 33%; }
 #mm_plugin .three-quarters { width: 75%; }
 #mm_plugin .text-center { text-align: center; }
 #mm_plugin .text-right { text-align: right; }
 #mm_plugin .text-left { text-align: left; }
 #mm_plugin .comment { color: #8c8c8c; }
+#mm_plugin p { font-size: 12px; margin: 6px 16px; }
 #mm_plugin input, #mm_plugin textarea, #mm_plugin select { border: 1px solid #bfbfbf; font-size: 12px; box-sizing: border-box; outline: none; margin: 1px 1px; padding: 1px; min-width: 60px; background-color: #f2f2f2; }
 #mm_plugin input[type=checkbox], #mm_plugin textarea[type=checkbox], #mm_plugin select[type=checkbox] { min-width: 16px; margin: 5px 2px; }
 #mm_plugin input.large, #mm_plugin textarea.large, #mm_plugin select.large { font-size: 14px; font-weight: bold; }
@@ -47,4 +49,4 @@
 #mm_plugin table.header { background-color: #d9d9d9; margin-bottom: 16px; }
 #mm_plugin table.header td { padding: 2px 6px; }
 #mm_plugin table.header select { border: 1px solid #cccccc; }
-#mm_plugin table.settings td { padding: 6px; }
+#mm_plugin table.settings td { padding: 4px; }

@@ -75,14 +75,16 @@ $formBorder: darken($white,20%);
 
 /* MM_PLUGIN */
 #mm_plugin {
-    .full {width: 100%}
-    .half {width: 50%}
-    .quarter {width: 25%}
-    .three-quarters{width: 75%}
-    .text-center{text-align: center;}
-    .text-right{text-align: right;}
-    .text-left{text-align: left;}
-    .comment {color: lighten($black,50%);}
+    .full { width: 100% }
+    .half { width: 50% }
+    .quarter { width: 25% }
+    .one-third { width: 33% }
+    .three-quarters { width: 75%}
+    .text-center { text-align: center;}
+    .text-right { text-align: right;}
+    .text-left { text-align: left;}
+    .comment  { color: lighten($black,50%);}
+    p {font-size: 12px; margin: 6px 16px;}
     input, textarea, select {
         border: 1px solid $formBorder;
         font-size: $fontSize;
@@ -148,8 +150,8 @@ $formBorder: darken($white,20%);
             select { border: 1px solid darken($white,15%);}
         }
         &.settings {
-            td{
-                padding: $fontSize/2;
+            td {
+                padding: $fontSize/3;                
             }
         }
     }
